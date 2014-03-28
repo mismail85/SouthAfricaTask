@@ -34,7 +34,9 @@ public class CoreControl {
 				Task task = new Task();
 				//TODO ask about the number of rectangles i suppose they will be 4
 				task.generateRects(4);
+				task.sortRects();
 				task.drawRects(window);
+				
 				
 			}
 		});
