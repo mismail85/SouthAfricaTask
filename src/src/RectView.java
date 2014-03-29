@@ -1,6 +1,8 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.JPanel;
 
@@ -19,7 +21,15 @@ public class RectView extends JPanel{
 		
 		int x = 0;
 		for (Rectangle rect : rects) {
-			g.drawRect(x, 100 - rect.getHeight() , rect.getWidth(), rect.getHeight());
+			
+			int y = 100 - rect.getHeight();
+			
+			g.setColor(rect.getColor());
+            g.fillRect(x, y, rect.getWidth(), rect.getHeight());
+            
+            g.setColor(Color.BLACK);
+			g.drawRect(x,  y, rect.getWidth(), rect.getHeight());
+			
 			x += rect.getWidth();			
 		}
 	}

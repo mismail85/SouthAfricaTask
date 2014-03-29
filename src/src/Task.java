@@ -1,3 +1,8 @@
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -6,51 +11,77 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+
 
 public class Task {
 
-	private RectView rectView;
-	private RectView sortedRectView;
+	private List<Rectangle> rectangles;
 
-	public Task(){
-		rectView = new RectView();
-		sortedRectView = new RectView();
-	}
+	private static final String JSON_FILE = "jsonFile.txt";
+	private static final int MAX = 100;
+	private static final int MIN  = 5;
 
 	public void generateRects(int count){
+		rectangles = new ArrayList<Rectangle>();
+
 		for(int i = 0; i < count; i++){
 			Rectangle rect = new Rectangle();
 
 			rect.setHeight(getRandom());
 			rect.setWidth(getRandom());
 
-			rectView.add(rect);
+			rectangles.add(rect);
 		}
 	}
 
-	public void drawRects(JFrame window){
-		JPanel container  = new JPanel();
-		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		
-		container.add(rectView);
-		container.add(sortedRectView);
-		
-		window.add(container);
+	public void saveRectsIntoFile(){
+		//Converting the rectangles array into Json & save it in a file
+		Gson gson = new Gson();
+		PrintWriter out;
+		try {
+			out = new PrintWriter(JSON_FILE);
+			out.println(gson.toJson(rectangles));
+			out.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void readRectsFromFile(){
+		Gson gson = new Gson();
+		JsonReader reader;
+		try {
+			reader = new JsonReader(new FileReader(JSON_FILE));
+			Type listType = new TypeToken<ArrayList<Rectangle>>() {
+			}.getType();
+			rectangles =  new ArrayList<Rectangle>((List<Rectangle>)gson.fromJson(reader, listType));
+
+			reader.close();
+		} catch (FileNotFoundException e) {
+
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public RectView getRectsView(){
+
+		RectView view = new RectView();
+		for(Rectangle rect : rectangles){
+			view.add(rect);
+		}
+		return view;
 	}
 
 	public void sortRects(){
-		List<Rectangle> rects = new ArrayList<Rectangle>(rectView.getRects());
-		quicksort(rects, 0, rects.size()-1);
 
-		for(Rectangle rect : rects){
-			System.out.println(rect.area());
-			sortedRectView.add(rect);
-		}		
-	}
-
-	private int getRandom(){
-		Random randomGenerator = new Random();
-		return randomGenerator.nextInt(100);
+		if(rectangles.size() > 0)
+			quicksort(rectangles, 0, rectangles.size()-1);
 	}
 
 	private void quicksort(List<Rectangle> rects, int low, int high) {
@@ -92,5 +123,10 @@ public class Task {
 			quicksort(rects, low, j);
 		if (i < high)
 			quicksort(rects, i, high);
+	}
+
+	private int getRandom(){
+		Random randomGenerator = new Random();
+		return randomGenerator.nextInt((MAX-MIN) + 1) + MIN;
 	}
 }
