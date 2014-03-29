@@ -15,13 +15,13 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-public class GUI extends JFrame implements ActionListener{
+public class CoreControl extends JFrame implements ActionListener{
 
 	private JSpinner spinner;
 	private JPanel panel;
 	public JPanel mainPanel = new JPanel();
 	
-	public GUI(){
+	public CoreControl(){
 		SpinnerModel model =
 				new SpinnerNumberModel(4, //initial value
 						3, //min
@@ -31,7 +31,7 @@ public class GUI extends JFrame implements ActionListener{
 		spinner.setMaximumSize(new Dimension(60, 20));
 		
 		JButton button = new JButton("Generate");
-		button.addActionListener(GUI.this);
+		button.addActionListener(CoreControl.this);
 
 		panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
@@ -66,7 +66,7 @@ public class GUI extends JFrame implements ActionListener{
 				catch(UnsupportedLookAndFeelException ex){
 
 				}
-				new GUI();
+				new CoreControl();
 			}
 		});
 	}
@@ -79,7 +79,7 @@ public class GUI extends JFrame implements ActionListener{
 		//1st step generating the requested number of rectangles
 		task.generateRects(Integer.parseInt(spinner.getValue().toString()));
 
-		// saving generating rectangles into file as JSON
+		// saving rectangles into file as JSON (the file will be in the same path of the jar)
 		task.saveRectsIntoFile();
 		
 		//read rectangles from file
