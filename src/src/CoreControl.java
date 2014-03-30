@@ -20,7 +20,7 @@ public class CoreControl extends JFrame implements ActionListener{
 	private JSpinner spinner;
 	private JPanel panel;
 	public JPanel mainPanel = new JPanel();
-	
+
 	public CoreControl(){
 		SpinnerModel model =
 				new SpinnerNumberModel(4, //initial value
@@ -29,7 +29,7 @@ public class CoreControl extends JFrame implements ActionListener{
 						1);      
 		spinner = new JSpinner(model);
 		spinner.setMaximumSize(new Dimension(60, 20));
-		
+
 		JButton button = new JButton("Generate");
 		button.addActionListener(CoreControl.this);
 
@@ -39,10 +39,10 @@ public class CoreControl extends JFrame implements ActionListener{
 		panel.add(spinner);
 		panel.add(Box.createRigidArea(new Dimension(10,0)));
 		panel.add(button);
-		
+
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 		mainPanel.add(panel);
-		
+
 		setSize(840, 560);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
@@ -58,13 +58,13 @@ public class CoreControl extends JFrame implements ActionListener{
 				} catch (ClassNotFoundException ex) {
 				}
 				catch(InstantiationException ex){
-
+					ex.printStackTrace();
 				}
 				catch(IllegalAccessException ex){
-
+					ex.printStackTrace();
 				}
 				catch(UnsupportedLookAndFeelException ex){
-
+					ex.printStackTrace();
 				}
 				new CoreControl();
 			}
@@ -73,7 +73,7 @@ public class CoreControl extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+
 		Task task = new Task();
 
 		//1st step generating the requested number of rectangles
@@ -81,32 +81,36 @@ public class CoreControl extends JFrame implements ActionListener{
 
 		// saving rectangles into file as JSON (the file will be in the same path of the jar)
 		task.saveRectsIntoFile();
-		
+
 		//read rectangles from file
 		task.readRectsFromFile();
 
 		//draw the unsorted rectangles
 		drawRects(task);
-		
+
 		//sort the rectangles using quick sort algorithm
 		task.sortRects();
 
-		//draw the sorted rectangles
-		drawRects(task);		
+		//draw the sorted rectangles & save coordinates to file
+		drawRects(task);
 	}
-	
+
 	private void drawRects(Task task){
 		JPanel container  = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 
 		container.add(task.getRectsView());
 
-		if(mainPanel.getComponentCount() > 2)
-			for(int i = 0; i < 2; i++)
-				mainPanel.remove(1);
-		
+		cleanView();
+
 		mainPanel.add(container);
 		mainPanel.revalidate();
 		mainPanel.repaint();
+	}
+
+	private void cleanView(){
+		if(mainPanel.getComponentCount() > 2)
+			for(int i = 0; i < 2; i++)
+				mainPanel.remove(1);
 	}
 }

@@ -19,8 +19,9 @@ import com.google.gson.stream.JsonReader;
 public class Task {
 
 	private List<Rectangle> rectangles;
-
+	
 	private static final String JSON_FILE = "jsonFile.txt";
+	
 	private static final int MAX = 100;
 	private static final int MIN  = 5;
 
@@ -75,6 +76,7 @@ public class Task {
 		for(Rectangle rect : rectangles){
 			view.add(rect);
 		}
+		
 		return view;
 	}
 
