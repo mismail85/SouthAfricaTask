@@ -1,7 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -104,6 +103,8 @@ public class CoreControl extends JFrame implements ActionListener{
 	private void drawRects(Task task){
 
 		RectView view = task.getRectsView();
+		view.revalidate();
+		view.repaint();
 		
 		JScrollPane scrollPane = new JScrollPane(view,
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, 

@@ -1,19 +1,9 @@
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.swing.BoxLayout;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
 
 
 public class Task {
@@ -40,34 +30,17 @@ public class Task {
 
 	public void saveRectsIntoFile(){
 		//Converting the rectangles array into Json & save it in a file
-		Gson gson = new Gson();
-		PrintWriter out;
-		try {
-			out = new PrintWriter(JSON_FILE);
-			out.println(gson.toJson(rectangles));
-			out.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+		JsonFile file = new JsonFile(JSON_FILE);
+		file.save(rectangles);
 	}
 
 	public void readRectsFromFile(){
-		Gson gson = new Gson();
-		JsonReader reader;
-		try {
-			reader = new JsonReader(new FileReader(JSON_FILE));
-			Type listType = new TypeToken<ArrayList<Rectangle>>() {
-			}.getType();
-			rectangles =  new ArrayList<Rectangle>((List<Rectangle>)gson.fromJson(reader, listType));
-
-			reader.close();
-		} catch (FileNotFoundException e) {
-
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Type type = new TypeToken<ArrayList<Rectangle>>() {
+		}.getType();
+		
+		JsonFile file = new JsonFile(JSON_FILE);
+		
+		rectangles = (ArrayList<Rectangle>)file.read(type);
 	}
 
 	public RectView getRectsView(){
