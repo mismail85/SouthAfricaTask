@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
@@ -9,6 +10,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
@@ -22,6 +24,10 @@ public class CoreControl extends JFrame implements ActionListener{
 	public JPanel mainPanel = new JPanel();
 
 	public CoreControl(){
+		init();
+	}
+
+	private void init(){
 		SpinnerModel model =
 				new SpinnerNumberModel(4, //initial value
 						3, //min
@@ -48,7 +54,7 @@ public class CoreControl extends JFrame implements ActionListener{
 		setVisible(true);
 		add(mainPanel);
 	}
-
+	
 	public static void main(String[] a) {
 		EventQueue.invokeLater(new Runnable() {
 			@Override
@@ -96,14 +102,16 @@ public class CoreControl extends JFrame implements ActionListener{
 	}
 
 	private void drawRects(Task task){
-		JPanel container  = new JPanel();
-		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 
-		container.add(task.getRectsView());
-
+		RectView view = task.getRectsView();
+		
+		JScrollPane scrollPane = new JScrollPane(view,
+				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, 
+				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+				
 		cleanView();
 
-		mainPanel.add(container);
+		mainPanel.add(scrollPane, BorderLayout.CENTER);
 		mainPanel.revalidate();
 		mainPanel.repaint();
 	}

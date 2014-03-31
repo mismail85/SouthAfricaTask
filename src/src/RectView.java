@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -44,9 +45,11 @@ public class RectView extends JPanel{
             g.setColor(Color.BLACK);
 			g.drawRect(x,  y, rect.getWidth(), rect.getHeight());
 			
-			x += rect.getWidth();			
+			x += rect.getWidth();
 		}
-		
+		setPreferredSize(new Dimension(x, 100));
+		revalidate();
+		repaint();
 		saveCoordinatesIntoFile();
 	}
 	
